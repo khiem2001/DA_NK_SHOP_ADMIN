@@ -1,0 +1,6 @@
+query getAdmin {
+  getAdmin {
+    fullName
+    userName
+  }
+}

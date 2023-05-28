@@ -1,3 +1,15 @@
 {
-  "extends": "next/core-web-vitals"
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": ["eslint:recommended", "next/core-web-vitals", "prettier"],
+  "ignorePatterns": ["src/graphql/generated/index.ts"],
+  "rules": {
+    "no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react/jsx-key": "warn",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unsafe-optional-chaining": "off",
+    "@next/next/no-img-element": "warn",
+    "react/no-unescaped-entities": 0,
+    "import/no-anonymous-default-export": "off"
+  }
 }

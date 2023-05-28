@@ -1,0 +1,17 @@
+overwrite: true
+schema: http://localhost:8000/graphql
+documents: 'src/**/*.graphql'
+generates:
+  src/graphql/generated/index.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+    config:
+      useTypeImports: true
+      #      omitOperationSuffix: true
+      namingConvention: pascal-case#pascalCase
+      fetcher: graphql-request
+      addExplicitOverride: true
+      #      fetcher: src/graphql/fetcher/graphql-fetcher#fetcher
+      isReactHook: true

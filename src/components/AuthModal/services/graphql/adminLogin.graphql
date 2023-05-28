@@ -1,0 +1,11 @@
+mutation adminLogin($input: AdminInputDto!) {
+  adminLogin(input: $input) {
+    token
+    refreshToken
+    expiresAt
+    payload {
+      fullName
+      userName
+    }
+  }
+}
