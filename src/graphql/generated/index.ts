@@ -444,6 +444,7 @@ export type ProductPayload = {
   compatibility?: Maybe<Scalars['String']>;
   connectivity?: Maybe<Scalars['String']>;
   countInStock?: Maybe<Scalars['Float']>;
+  createdAt?: Maybe<Scalars['Float']>;
   description?: Maybe<Scalars['String']>;
   dimensions?: Maybe<Scalars['String']>;
   image?: Maybe<Media>;
@@ -456,6 +457,7 @@ export type ProductPayload = {
   totalLike?: Maybe<Scalars['Float']>;
   totalSold?: Maybe<Scalars['Float']>;
   type?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['Float']>;
   video?: Maybe<Scalars['String']>;
   warranty?: Maybe<Scalars['String']>;
   weight?: Maybe<Scalars['String']>;
@@ -629,6 +631,20 @@ export type AdminLoginMutationVariables = Exact<{
 
 export type AdminLoginMutation = { __typename?: 'Mutation', adminLogin: { __typename?: 'AdminLoginResponse', token: string, refreshToken: string, expiresAt: string, payload: { __typename?: 'AdminPayLoad', fullName?: string | null, userName: string } } };
 
+export type GetListProductQueryVariables = Exact<{
+  input: GetListProductInput;
+}>;
+
+
+export type GetListProductQuery = { __typename?: 'Query', getListProduct: { __typename?: 'GetListProductResponse', products?: Array<{ __typename?: 'ProductPayload', _id?: string | null, name?: string | null, createdAt?: number | null, updatedAt?: number | null, image?: { __typename?: 'Media', url?: string | null } | null }> | null } };
+
+export type GetProductQueryVariables = Exact<{
+  input: ReadProductInputDto;
+}>;
+
+
+export type GetProductQuery = { __typename?: 'Query', getProduct: { __typename?: 'GetProductResponse', product?: { __typename?: 'ProductPayload', _id?: string | null, name?: string | null, description?: string | null, price?: number | null, countInStock?: number | null, manufacturer?: string | null, modelNumber?: string | null, dimensions?: string | null, weight?: string | null, connectivity?: string | null, powerSource?: string | null, compatibility?: string | null, warranty?: string | null, totalLike?: number | null, totalComment?: number | null, type?: string | null, totalSold?: number | null, image?: { __typename?: 'Media', url?: string | null } | null } | null } };
+
 export type GetAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -659,6 +675,77 @@ export const useAdminLoginMutation = <
     useMutation<AdminLoginMutation, TError, AdminLoginMutationVariables, TContext>(
       ['adminLogin'],
       (variables?: AdminLoginMutationVariables) => fetcher<AdminLoginMutation, AdminLoginMutationVariables>(client, AdminLoginDocument, variables, headers)(),
+      options
+    );
+export const GetListProductDocument = `
+    query getListProduct($input: GetListProductInput!) {
+  getListProduct(input: $input) {
+    products {
+      _id
+      name
+      image {
+        url
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}
+    `;
+export const useGetListProductQuery = <
+      TData = GetListProductQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetListProductQueryVariables,
+      options?: UseQueryOptions<GetListProductQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetListProductQuery, TError, TData>(
+      ['getListProduct', variables],
+      fetcher<GetListProductQuery, GetListProductQueryVariables>(client, GetListProductDocument, variables, headers),
+      options
+    );
+export const GetProductDocument = `
+    query getProduct($input: ReadProductInputDto!) {
+  getProduct(input: $input) {
+    product {
+      _id
+      name
+      description
+      price
+      countInStock
+      image {
+        url
+      }
+      manufacturer
+      modelNumber
+      dimensions
+      weight
+      connectivity
+      powerSource
+      compatibility
+      warranty
+      totalLike
+      totalComment
+      type
+      totalSold
+    }
+  }
+}
+    `;
+export const useGetProductQuery = <
+      TData = GetProductQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetProductQueryVariables,
+      options?: UseQueryOptions<GetProductQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetProductQuery, TError, TData>(
+      ['getProduct', variables],
+      fetcher<GetProductQuery, GetProductQueryVariables>(client, GetProductDocument, variables, headers),
       options
     );
 export const GetAdminDocument = `

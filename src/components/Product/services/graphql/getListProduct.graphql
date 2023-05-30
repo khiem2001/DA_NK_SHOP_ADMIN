@@ -1,0 +1,14 @@
+query getListProduct($input: GetListProductInput!) {
+  getListProduct(input: $input) {
+    products {
+      _id
+      name
+
+      image {
+        url
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}

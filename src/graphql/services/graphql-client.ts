@@ -17,3 +17,14 @@ export const graphqlClientRequest = (isAuth = false) => {
     headers
   });
 };
+
+export const getHeaders = async (isAuth = false) => {
+  const headers: any = {};
+  if (isAuth && isBrowser) {
+    let tokens = getTokens();
+    if (tokens?.access) {
+      headers.authorization = `Bearer ${tokens.access}`;
+    }
+  }
+  return headers;
+};

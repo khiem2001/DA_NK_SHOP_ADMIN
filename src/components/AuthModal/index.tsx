@@ -7,10 +7,10 @@ import Notification from '../Notification';
 const AuthModal = () => {
   const router = useRouter();
 
-  const { user } = useUserStore(store => store) as UserStore;
-  if (user) {
-    router.push('/');
-  }
+  // const { user } = useUserStore(store => store) as UserStore;
+  // if (user) {
+  //   router.back();
+  // }
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const { handleSubmitLogin, isLoading } = useLogin();

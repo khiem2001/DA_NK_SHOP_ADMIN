@@ -3,9 +3,12 @@ import { AdminLoginMutation, useAdminLoginMutation } from '@/graphql/generated';
 import { graphqlClientRequest } from '@/graphql/services/graphql-client';
 import useUserStore, { UserStore } from '@/store/useUserStore';
 import { showErrorMessage } from '@/utils/error';
+import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
 const useLogin = () => {
+  const router = useRouter();
+
   const { setUserData, login } = useUserStore(store => store) as UserStore;
 
   const onLogin = (response?: AdminLoginMutation | any) => {
@@ -22,6 +25,7 @@ const useLogin = () => {
         user
       );
       Notification.Success('Đăng nhập thành công');
+      router.push('/');
     } else {
       Notification.Error('Xảy ra lỗi không xác định');
     }

@@ -20,17 +20,3 @@ export const getTokens = () => {
     refresh: localStorage.getItem(LS_ADMIN_REFRESH_TOKEN)
   };
 };
-
-export const useRequireAuth = () => {
-  const router = useRouter();
-  const { user } = useUserStore(store => store) as UserStore;
-
-  useEffect(() => {
-    console.log('user', user);
-    if (!user) {
-      router.push('/login');
-    }
-  }, [router]);
-
-  return null;
-};

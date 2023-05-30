@@ -2,13 +2,12 @@ import { useState, useEffect, Fragment } from 'react';
 import { Transition } from '@headlessui/react';
 import TopBar from '../TopBar';
 import SideBar from '../SideBar';
-
-import { useRequireAuth } from '@/utils/auth';
 import useAuth from '@/hooks/useAuth';
 
 export default function Layout({ children }: any) {
   const [showNav, setShowNav] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+
   useAuth();
 
   function handleResize() {

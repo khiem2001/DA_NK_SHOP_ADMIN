@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { FaBars, FaPencilAlt, FaChevronDown, FaCreditCard, FaCog } from 'react-icons/fa';
 import { IoMdCheckmark } from 'react-icons/io';
 import { BsBell } from 'react-icons/bs';
-
+import { BiMessageDetail } from 'react-icons/bi';
 import { Menu, Transition, Popover } from '@headlessui/react';
 import Link from 'next/link';
 import useUserStore, { UserStore } from '@/store/useUserStore';
@@ -18,8 +18,11 @@ const TopBar = ({ showNav, setShowNav }: any) => {
       <div className="pl-4 md:pl-16">
         <FaBars className="text-black h-8 w-8  cursor-pointer" onClick={() => setShowNav(!showNav)} />
       </div>
-      <div className="flex items-center pr-4 md:pr-16">
-        <Popover className="relative">
+      <div className="flex items-center pr-4 md:pr-16 ">
+        <Popover className="relative flex ">
+          <Link href={'/messager'} className="mr-5 md:mr-8 ">
+            <BiMessageDetail size={30} />
+          </Link>
           <Popover.Button className="outline-none mr-5 md:mr-8 cursor-pointer text-gray-700">
             <BsBell className="h-6 w-6" />
           </Popover.Button>
