@@ -17,7 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       <Layout>
         <Component {...pageProps} />
-        <ToastContainer />
+        {/* <ToastContainer /> */}
       </Layout>
 
       <ReactQueryDevtools initialIsOpen={false} />

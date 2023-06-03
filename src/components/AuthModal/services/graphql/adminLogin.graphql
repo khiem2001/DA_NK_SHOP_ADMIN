@@ -4,6 +4,7 @@ mutation adminLogin($input: AdminInputDto!) {
     refreshToken
     expiresAt
     payload {
+      _id
       fullName
       userName
     }

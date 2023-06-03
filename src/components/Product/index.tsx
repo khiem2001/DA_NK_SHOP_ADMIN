@@ -4,6 +4,7 @@ import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
 import { useListProduct } from './services/hook/useListProduct';
 import Link from 'next/link';
 import { RiAddLine } from 'react-icons/ri';
+import Image from 'next/image';
 const customStyles = {
   cells: {
     style: {
@@ -36,7 +37,7 @@ const Product = () => {
     {
       name: 'Hình ảnh',
       cell: (row: any) => (
-        <img src={`${process.env.NEXT_PUBLIC_MEDIA_ENDPOINT}${row.image.url}`} alt="" style={{ width: '70px' }} />
+        <Image src={`${process.env.NEXT_PUBLIC_MEDIA_ENDPOINT}${row.image.url}`} alt="" width={70} height={90} />
       )
     },
     { name: 'Tên Sản Phẩm', selector: (row: any) => row.name, sortable: true },

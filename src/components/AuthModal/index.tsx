@@ -33,7 +33,7 @@ const AuthModal = () => {
       {' '}
       <div className="bg-white w-5/12  m-auto p-28 pt-14 flex flex-col">
         <div>
-          <button
+          {/* <button
             className="text-2xl mb-14 float-right "
             onClick={() => {
               router.push('/');
@@ -41,7 +41,7 @@ const AuthModal = () => {
             }}
           >
             <FaTimes />
-          </button>
+          </button> */}
         </div>
         <h1 className="text-2xl">Đăng Nhập Là Quản Trị Viên </h1>{' '}
         <form onSubmit={handleSubmit}>

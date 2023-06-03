@@ -1,14 +1,16 @@
 import { Fragment } from 'react';
-import { FaBars, FaPencilAlt, FaChevronDown, FaCreditCard, FaCog } from 'react-icons/fa';
+import { FaBars, FaChevronDown, FaCreditCard, FaCog } from 'react-icons/fa';
 import { IoMdCheckmark } from 'react-icons/io';
 import { BsBell } from 'react-icons/bs';
 import { BiMessageDetail } from 'react-icons/bi';
 import { Menu, Transition, Popover } from '@headlessui/react';
 import Link from 'next/link';
 import useUserStore, { UserStore } from '@/store/useUserStore';
+import { AiOutlineLogout } from 'react-icons/ai';
 
 const TopBar = ({ showNav, setShowNav }: any) => {
-  const { user } = useUserStore(store => store) as UserStore;
+  const { user, logout } = useUserStore(store => store) as UserStore;
+
   return (
     <div
       className={`fixed w-full h-16 flex justify-between items-center transition-all duration-[400ms] ${
@@ -117,29 +119,14 @@ const TopBar = ({ showNav, setShowNav }: any) => {
               <div className="p-1">
                 <Menu.Item>
                   <Link
-                    href="#"
+                    href="/login"
+                    onClick={() => {
+                      logout();
+                    }}
                     className="flex hover:bg-orange-500 hover:text-white text-gray-700 rounded p-2 text-sm group transition-colors items-center"
                   >
-                    <FaPencilAlt className="h-4 w-4 mr-2" />
-                    Edit
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                  <Link
-                    href="#"
-                    className="flex hover:bg-orange-500 hover:text-white text-gray-700 rounded p-2 text-sm group transition-colors items-center"
-                  >
-                    <FaCreditCard className="h-4 w-4 mr-2" />
-                    Billing
-                  </Link>
-                </Menu.Item>
-                <Menu.Item>
-                  <Link
-                    href="#"
-                    className="flex hover:bg-orange-500 hover:text-white text-gray-700 rounded p-2 text-sm group transition-colors items-center"
-                  >
-                    <FaCog className="h-4 w-4 mr-2" />
-                    Settings
+                    <AiOutlineLogout className="h-4 w-4 mr-2" />
+                    Đăng xuất
                   </Link>
                 </Menu.Item>
               </div>

@@ -1,0 +1,15 @@
+query listMessage($input: ListMessageInput!) {
+  listMessage(input: $input) {
+    data {
+      senderId {
+        _id
+        fullName
+        avatarId {
+          url
+        }
+      }
+      content
+      createdAt
+    }
+  }
+}

@@ -1,0 +1,17 @@
+query listConversation($input: ListConversationInput!) {
+  listConversation(input: $input) {
+    data {
+      _id
+      members {
+        _id
+        fullName
+        avatarId {
+          url
+        }
+      }
+      ownerId
+      type
+      name
+    }
+  }
+}

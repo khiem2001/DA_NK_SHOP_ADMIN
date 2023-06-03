@@ -2,5 +2,6 @@ query getAdmin {
   getAdmin {
     fullName
     userName
+    _id
   }
 }

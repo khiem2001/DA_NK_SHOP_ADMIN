@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { clearAuthTokens, saveAdminToken } from '../utils/auth';
-import { AdminPayLoad } from '@/graphql/generated';
+import { AdminPayload } from '@/graphql/generated';
 
 export interface UserStore {
   token: {
@@ -8,15 +8,15 @@ export interface UserStore {
     refreshToken: string;
   };
   isLogin: boolean;
-  user?: AdminPayLoad;
-  setUserData: (user: AdminPayLoad | any) => void;
+  user?: AdminPayload;
+  setUserData: (user: AdminPayload | any) => void;
   logout: () => void;
   login: (
     token: {
       accessToken: string;
       refreshToken: string;
     },
-    user: AdminPayLoad
+    user: AdminPayload
   ) => void;
 }
 

@@ -32,20 +32,15 @@ export type AdminInputDto = {
 export type AdminLoginResponse = {
   __typename?: 'AdminLoginResponse';
   expiresAt: Scalars['String'];
-  payload: AdminPayLoad;
+  payload: AdminPayload;
   refreshToken: Scalars['String'];
   refreshTokenExpiresAt: Scalars['String'];
   token: Scalars['String'];
 };
 
-export type AdminPayLoad = {
-  __typename?: 'AdminPayLoad';
-  fullName?: Maybe<Scalars['String']>;
-  userName: Scalars['String'];
-};
-
 export type AdminPayload = {
   __typename?: 'AdminPayload';
+  _id?: Maybe<Scalars['String']>;
   fullName?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   userName?: Maybe<Scalars['String']>;
@@ -106,7 +101,7 @@ export type ConversationDtoType = {
   createdBy?: Maybe<Scalars['String']>;
   deletedAt?: Maybe<Scalars['Float']>;
   deletedBy?: Maybe<Scalars['String']>;
-  members: Array<Scalars['String']>;
+  members?: Maybe<Array<Maybe<UserDtoType>>>;
   name: Scalars['String'];
   ownerId?: Maybe<Scalars['String']>;
   type: ConversationType;
@@ -153,21 +148,20 @@ export type CreatePaymentResponse = {
 };
 
 export type CreateProductInputDto = {
-  compatibility: Scalars['String'];
-  connectivity: Scalars['String'];
+  compatibility?: InputMaybe<Scalars['String']>;
+  connectivity?: InputMaybe<Scalars['String']>;
   countInStock: Scalars['Float'];
   description: Scalars['String'];
-  dimensions: Scalars['String'];
+  dimensions?: InputMaybe<Scalars['String']>;
   image: Scalars['String'];
-  manufacturer: Scalars['String'];
-  modelNumber: Scalars['String'];
+  manufacturer?: InputMaybe<Scalars['String']>;
+  modelNumber?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
-  powerSource: Scalars['String'];
+  powerSource?: InputMaybe<Scalars['String']>;
   price: Scalars['Float'];
   type: Scalars['String'];
-  video: Scalars['String'];
-  warranty: Scalars['String'];
-  weight: Scalars['String'];
+  warranty?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['String']>;
 };
 
 export type FilterProductInput = {
@@ -214,6 +208,25 @@ export type ListCommentResponse = {
   data?: Maybe<Array<CommentResponse>>;
 };
 
+export type ListConversationInput = {
+  userId: Scalars['String'];
+};
+
+export type ListConversationResponse = {
+  __typename?: 'ListConversationResponse';
+  data: Array<ConversationDtoType>;
+};
+
+export type ListMessageInput = {
+  conversationId: Scalars['String'];
+  pagination: PaginationBaseInput;
+};
+
+export type ListMessageResponse = {
+  __typename?: 'ListMessageResponse';
+  data: Array<MessageDtoType>;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   expiresAt: Scalars['String'];
@@ -250,6 +263,20 @@ export enum MediaStatus {
   Uploaded = 'UPLOADED',
   Uploading = 'UPLOADING'
 }
+
+export type MessageDtoType = {
+  __typename?: 'MessageDtoType';
+  _id: Scalars['String'];
+  content: Scalars['String'];
+  conversationId: Scalars['String'];
+  createdAt?: Maybe<Scalars['Float']>;
+  createdBy?: Maybe<Scalars['String']>;
+  deletedAt?: Maybe<Scalars['Float']>;
+  deletedBy?: Maybe<Scalars['String']>;
+  senderId?: Maybe<UserDtoType>;
+  updatedAt?: Maybe<Scalars['Float']>;
+  updatedBy?: Maybe<Scalars['String']>;
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -422,20 +449,19 @@ export enum PaymentType {
 }
 
 export type ProductInputDto = {
-  compatibility: Scalars['String'];
-  connectivity: Scalars['String'];
+  compatibility?: InputMaybe<Scalars['String']>;
+  connectivity?: InputMaybe<Scalars['String']>;
   countInStock: Scalars['Float'];
   description: Scalars['String'];
-  dimensions: Scalars['String'];
+  dimensions?: InputMaybe<Scalars['String']>;
   image: Scalars['String'];
-  manufacturer: Scalars['String'];
-  modelNumber: Scalars['String'];
+  manufacturer?: InputMaybe<Scalars['String']>;
+  modelNumber?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
-  powerSource: Scalars['String'];
+  powerSource?: InputMaybe<Scalars['String']>;
   price: Scalars['Float'];
-  video: Scalars['String'];
-  warranty: Scalars['String'];
-  weight: Scalars['String'];
+  warranty?: InputMaybe<Scalars['String']>;
+  weight?: InputMaybe<Scalars['String']>;
 };
 
 export type ProductPayload = {
@@ -486,6 +512,8 @@ export type Query = {
   getMe: UserDtoType;
   getProduct: GetProductResponse;
   listComment: ListCommentResponse;
+  listConversation: ListConversationResponse;
+  listMessage: ListMessageResponse;
   listType: GetListTypeResponse;
 };
 
@@ -502,6 +530,16 @@ export type QueryGetProductArgs = {
 
 export type QueryListCommentArgs = {
   input: ListCommentInput;
+};
+
+
+export type QueryListConversationArgs = {
+  input: ListConversationInput;
+};
+
+
+export type QueryListMessageArgs = {
+  input: ListMessageInput;
 };
 
 export type ReadProductInputDto = {
@@ -629,7 +667,21 @@ export type AdminLoginMutationVariables = Exact<{
 }>;
 
 
-export type AdminLoginMutation = { __typename?: 'Mutation', adminLogin: { __typename?: 'AdminLoginResponse', token: string, refreshToken: string, expiresAt: string, payload: { __typename?: 'AdminPayLoad', fullName?: string | null, userName: string } } };
+export type AdminLoginMutation = { __typename?: 'Mutation', adminLogin: { __typename?: 'AdminLoginResponse', token: string, refreshToken: string, expiresAt: string, payload: { __typename?: 'AdminPayload', _id?: string | null, fullName?: string | null, userName?: string | null } } };
+
+export type ListConversationQueryVariables = Exact<{
+  input: ListConversationInput;
+}>;
+
+
+export type ListConversationQuery = { __typename?: 'Query', listConversation: { __typename?: 'ListConversationResponse', data: Array<{ __typename?: 'ConversationDtoType', _id: string, ownerId?: string | null, type: ConversationType, name: string, members?: Array<{ __typename?: 'UserDtoType', _id?: string | null, fullName?: string | null, avatarId?: { __typename?: 'Media', url?: string | null } | null } | null> | null }> } };
+
+export type ListMessageQueryVariables = Exact<{
+  input: ListMessageInput;
+}>;
+
+
+export type ListMessageQuery = { __typename?: 'Query', listMessage: { __typename?: 'ListMessageResponse', data: Array<{ __typename?: 'MessageDtoType', content: string, createdAt?: number | null, senderId?: { __typename?: 'UserDtoType', _id?: string | null, fullName?: string | null, avatarId?: { __typename?: 'Media', url?: string | null } | null } | null }> } };
 
 export type GetListProductQueryVariables = Exact<{
   input: GetListProductInput;
@@ -648,7 +700,7 @@ export type GetProductQuery = { __typename?: 'Query', getProduct: { __typename?:
 export type GetAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminQuery = { __typename?: 'Query', getAdmin: { __typename?: 'AdminPayload', fullName?: string | null, userName?: string | null } };
+export type GetAdminQuery = { __typename?: 'Query', getAdmin: { __typename?: 'AdminPayload', fullName?: string | null, userName?: string | null, _id?: string | null } };
 
 
 export const AdminLoginDocument = `
@@ -658,6 +710,7 @@ export const AdminLoginDocument = `
     refreshToken
     expiresAt
     payload {
+      _id
       fullName
       userName
     }
@@ -675,6 +728,70 @@ export const useAdminLoginMutation = <
     useMutation<AdminLoginMutation, TError, AdminLoginMutationVariables, TContext>(
       ['adminLogin'],
       (variables?: AdminLoginMutationVariables) => fetcher<AdminLoginMutation, AdminLoginMutationVariables>(client, AdminLoginDocument, variables, headers)(),
+      options
+    );
+export const ListConversationDocument = `
+    query listConversation($input: ListConversationInput!) {
+  listConversation(input: $input) {
+    data {
+      _id
+      members {
+        _id
+        fullName
+        avatarId {
+          url
+        }
+      }
+      ownerId
+      type
+      name
+    }
+  }
+}
+    `;
+export const useListConversationQuery = <
+      TData = ListConversationQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: ListConversationQueryVariables,
+      options?: UseQueryOptions<ListConversationQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<ListConversationQuery, TError, TData>(
+      ['listConversation', variables],
+      fetcher<ListConversationQuery, ListConversationQueryVariables>(client, ListConversationDocument, variables, headers),
+      options
+    );
+export const ListMessageDocument = `
+    query listMessage($input: ListMessageInput!) {
+  listMessage(input: $input) {
+    data {
+      senderId {
+        _id
+        fullName
+        avatarId {
+          url
+        }
+      }
+      content
+      createdAt
+    }
+  }
+}
+    `;
+export const useListMessageQuery = <
+      TData = ListMessageQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: ListMessageQueryVariables,
+      options?: UseQueryOptions<ListMessageQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<ListMessageQuery, TError, TData>(
+      ['listMessage', variables],
+      fetcher<ListMessageQuery, ListMessageQueryVariables>(client, ListMessageDocument, variables, headers),
       options
     );
 export const GetListProductDocument = `
@@ -753,6 +870,7 @@ export const GetAdminDocument = `
   getAdmin {
     fullName
     userName
+    _id
   }
 }
     `;
