@@ -3,9 +3,11 @@ import UserBox from './userBox';
 import { useListConversation } from '../../services/hook/useListConversation';
 import useUserStore, { UserStore } from '@/store/useUserStore';
 import LoadingModal from '@/components/LoadingModal';
+import { LoadingCenter } from '@/components/Loading';
 
 const UserList = () => {
   const { user } = useUserStore(store => store) as UserStore;
+
   const { listConversation, isLoading } = useListConversation({ userId: user?._id || '' });
 
   return (
@@ -14,145 +16,18 @@ const UserList = () => {
         <p className="text-blue-700 mb-5  bg-blue-200 text-center py-2">Hộp thư</p>
       </div>
       <div className=" h-[680px] p-2 overflow-y-auto pr-7">
-        {isLoading && <LoadingModal />}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
-        {listConversation.map(obj => {
-          if (obj.type === 'PERSONAL') {
-            return <UserBox props={obj} key={obj._id} />;
-          }
-          return null;
-        })}
+        {isLoading ? (
+          <LoadingCenter />
+        ) : listConversation.length !== 0 ? (
+          listConversation.map(obj => {
+            if (obj.type === 'PERSONAL') {
+              return <UserBox props={obj} key={obj._id} />;
+            }
+            return null;
+          })
+        ) : (
+          <div className="text-center">Chưa cuộc trò chuyện nào !</div>
+        )}
       </div>
     </div>
   );

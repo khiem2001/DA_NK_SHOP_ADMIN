@@ -11,7 +11,10 @@ const MessageBox = ({ props }: any) => {
   if (senderId && senderId._id !== user?._id) {
     isOwn = false;
   }
-  const imageUrl = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT + senderId?.avatarId?.url;
+  const imageUrl =
+    senderId?.fullName === 'Admin'
+      ? '/images/admin.jpg'
+      : process.env.NEXT_PUBLIC_MEDIA_ENDPOINT + senderId?.avatarId?.url;
   const container = clsx('flex gap-3 mb-5', isOwn && 'justify-end');
   const avatar = clsx(isOwn && 'order-2');
   const body = clsx('flex flex-col gap-2  w-[50%]', isOwn && 'items-end');

@@ -4,8 +4,6 @@ import { io, Socket } from 'socket.io-client';
 import { MdSend } from 'react-icons/md';
 import MessageBox from './messageBox';
 import { useListMessage } from '../../services/hook/useListMessage';
-import LoadingModal from '@/components/LoadingModal';
-import { MessageDtoType } from '@/graphql/generated';
 import { LoadingCenter } from '@/components/Loading';
 
 interface Message {
@@ -72,7 +70,7 @@ const ConversationBox = ({ props }: any) => {
     e.preventDefault();
     const payload = {
       to: props._id,
-      from: { _id: user?._id, avatarId: null, fullName: 'Admin' },
+      from: { _id: user?._id, avatarId: { url: '/images/account/admin.jpg' }, fullName: 'Admin' },
       message: message
     };
     socket && socket.emit('sendMessage', payload);
