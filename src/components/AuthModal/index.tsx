@@ -7,10 +7,6 @@ import Notification from '../Notification';
 const AuthModal = () => {
   const router = useRouter();
 
-  // const { user } = useUserStore(store => store) as UserStore;
-  // if (user) {
-  //   router.back();
-  // }
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const { handleSubmitLogin, isLoading } = useLogin();
@@ -32,8 +28,8 @@ const AuthModal = () => {
     <div className="absolute w-full flex align-middle bg-black bg-opacity-80 z-50 top-0  left-0 right-0 bottom-0">
       {' '}
       <div className="bg-white w-5/12  m-auto p-28 pt-14 flex flex-col">
-        <div>
-          {/* <button
+        {/* <div>
+          <button
             className="text-2xl mb-14 float-right "
             onClick={() => {
               router.push('/');
@@ -41,8 +37,8 @@ const AuthModal = () => {
             }}
           >
             <FaTimes />
-          </button> */}
-        </div>
+          </button>
+        </div> */}
         <h1 className="text-2xl">Đăng Nhập Là Quản Trị Viên </h1>{' '}
         <form onSubmit={handleSubmit}>
           {' '}

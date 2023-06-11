@@ -3,6 +3,7 @@ import { Transition } from '@headlessui/react';
 import TopBar from '../TopBar';
 import SideBar from '../SideBar';
 import useAuth from '@/hooks/useAuth';
+import { ToastContainer } from 'react-toastify';
 
 export default function Layout({ children }: any) {
   const [showNav, setShowNav] = useState(true);

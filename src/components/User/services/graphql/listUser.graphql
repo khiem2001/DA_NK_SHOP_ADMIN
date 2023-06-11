@@ -1,0 +1,23 @@
+query listUser {
+  listUser {
+    user {
+      createdAt
+      _id
+      fullName
+      email
+      phoneNumber
+      verifyEmail
+      verifyPhone
+      verified
+      gender
+      birthday
+      address
+      provider
+      avatarId {
+        _id
+        url
+      }
+      active
+    }
+  }
+}

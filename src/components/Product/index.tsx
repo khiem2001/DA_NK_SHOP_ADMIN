@@ -5,6 +5,10 @@ import { useListProduct } from './services/hook/useListProduct';
 import Link from 'next/link';
 import { RiAddLine } from 'react-icons/ri';
 import Image from 'next/image';
+import { LoadingCenter } from '../Loading';
+import useProductStore, { ProductStore } from '@/store/useProductStore';
+import { useRouter } from 'next/router';
+import useDeleteProduct from './services/hook/useDeleteProduct';
 const customStyles = {
   cells: {
     style: {
@@ -31,7 +35,9 @@ const Product = () => {
       page: 1
     }
   });
-
+  const { handleDeleteProduct } = useDeleteProduct();
+  const { setProductId } = useProductStore(store => store as ProductStore);
+  const router = useRouter();
   const columns = [
     { name: 'ID', selector: (row: any) => row._id },
     {
@@ -81,7 +87,7 @@ const Product = () => {
   const [records, setRecords] = useState(listProduct.products);
   useEffect(() => {
     setRecords(listProduct.products);
-  }, [isLoading]);
+  }, [isLoading, listProduct]);
   const handleFilter = (e: any) => {
     const newData = listProduct?.products?.filter(row =>
       row.name?.toLowerCase().includes(e.target.value.toLowerCase())
@@ -90,13 +96,15 @@ const Product = () => {
   };
 
   const handleEdit = (row: any) => {
-    // Xử lý sự kiện chỉnh sửa
-    console.log('Chỉnh sửa bản ghi:', row);
+    setProductId(row._id);
+    router.push('/product/update');
   };
 
   const handleDelete = (row: any) => {
-    // Xử lý sự kiện xóa
-    console.log('Xóa bản ghi:', row);
+    const confirmDelete = window.confirm('Bạn có chắc chắn muốn xoá bản ghi này?');
+    if (confirmDelete) {
+      handleDeleteProduct({ productId: row._id });
+    }
   };
 
   return (
@@ -112,7 +120,7 @@ const Product = () => {
         </Link>
       </div>
       {isLoading ? (
-        <>Loading...</>
+        <LoadingCenter />
       ) : (
         <DataTable
           columns={columns}

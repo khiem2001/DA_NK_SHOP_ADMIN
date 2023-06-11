@@ -1,0 +1,5 @@
+mutation confirmOrder($input: ConfirmOrderInput!) {
+  confirmOrder(input: $input) {
+    success
+  }
+}

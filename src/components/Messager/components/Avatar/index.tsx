@@ -18,7 +18,7 @@ const Avatar = ({ props }: any) => {
         <Image fill src={props.image} alt="Avatar" />
       </div>
 
-      <span
+      {/* <span
         className="
             absolute
             block
@@ -33,7 +33,7 @@ const Avatar = ({ props }: any) => {
             md:h-3
             md:w-3
           "
-      />
+      /> */}
     </div>
   );
 };

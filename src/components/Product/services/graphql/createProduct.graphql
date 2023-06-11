@@ -1,0 +1,5 @@
+mutation createProduct($input: CreateProductInputDto!) {
+  createProduct(input: $input) {
+    success
+  }
+}

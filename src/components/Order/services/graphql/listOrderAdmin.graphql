@@ -1,0 +1,43 @@
+query listOrderAdmin {
+  listOrderAdmin {
+    orders {
+      _id
+      code
+      status
+      amount
+      description
+      couponCode
+      discountAmount
+      subTotal
+
+      paymentMethod
+      transaction {
+        gateway
+        id
+        time
+      }
+      items {
+        id {
+          _id
+          name
+          image {
+            url
+          }
+        }
+        name
+        quantity
+        price
+      }
+      shippingStatus
+      shippingAddress
+      createdAt
+      userId {
+        _id
+        fullName
+        avatarId {
+          url
+        }
+      }
+    }
+  }
+}

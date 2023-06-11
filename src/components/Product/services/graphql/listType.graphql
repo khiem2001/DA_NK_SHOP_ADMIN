@@ -1,0 +1,8 @@
+query ListType {
+  listType {
+    data {
+      _id
+      name
+    }
+  }
+}

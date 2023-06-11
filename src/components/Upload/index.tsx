@@ -20,9 +20,8 @@ const beforeUpload = (file: any) => {
   return isJpgOrPng;
 };
 
-const ImageUploader = () => {
+const ImageUploader = ({ onImageIdChange, imageUrl, setImageUrl }: any) => {
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState();
 
   const handleChange = async (info: any) => {
     if (info.file.status === 'uploading') {
@@ -38,11 +37,11 @@ const ImageUploader = () => {
             'Content-Type': 'multipart/form-data'
           }
         });
-        // setImageId(response.data._id);
         // Lấy URL ảnh đã tải lên từ phản hồi của API
-        const imageUrl = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT + response.data.url;
+        const image = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT + response.data.url;
+        onImageIdChange(response.data._id);
         // Đặt URL ảnh đã tải lên để hiển thị
-        setImageUrl(imageUrl);
+        setImageUrl(image);
         setLoading(false);
       } catch (error) {
         console.error('Upload error:', error);

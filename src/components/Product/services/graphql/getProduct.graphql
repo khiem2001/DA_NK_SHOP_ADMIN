@@ -8,6 +8,7 @@ query getProduct($input: ReadProductInputDto!) {
       countInStock
       image {
         url
+        _id
       }
       manufacturer
       modelNumber

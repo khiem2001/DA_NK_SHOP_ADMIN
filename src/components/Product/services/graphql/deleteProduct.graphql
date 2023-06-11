@@ -1,0 +1,5 @@
+mutation deleteProduct($input: ReadProductInputDto!) {
+  deleteProduct(input: $input) {
+    success
+  }
+}

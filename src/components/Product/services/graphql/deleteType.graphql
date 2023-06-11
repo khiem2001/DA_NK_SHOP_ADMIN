@@ -1,0 +1,5 @@
+mutation deleteType($input: DeleteTypeInput!) {
+  deleteType(input: $input) {
+    success
+  }
+}

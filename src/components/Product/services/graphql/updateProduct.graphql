@@ -1,0 +1,5 @@
+mutation updateProduct($input: UpdateProductInputDto!) {
+  updateProduct(input: $input) {
+    success
+  }
+}

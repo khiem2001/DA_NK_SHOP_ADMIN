@@ -30,9 +30,10 @@ const ConversationBox = ({ props }: any) => {
   }, [listMessage]);
 
   useEffect(() => {
+    console.log('aaa');
     const newSocket = io('http://localhost:8000');
     newSocket.on('connect', () => {
-      console.log('Connected to server');
+      console.log('Connected to server', props._id);
 
       newSocket.emit('joinRoom', props._id);
     });
@@ -45,7 +46,7 @@ const ConversationBox = ({ props }: any) => {
     return () => {
       newSocket.disconnect();
     };
-  }, []);
+  }, [props._id]);
 
   useEffect(() => {
     if (socket) {
