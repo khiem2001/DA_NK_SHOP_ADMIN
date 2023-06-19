@@ -24,6 +24,11 @@ export type Scalars = {
   Float: number;
 };
 
+export type AddToCartInput = {
+  productId: Scalars['String'];
+  quantity: Scalars['Float'];
+};
+
 export type AdminInputDto = {
   password: Scalars['String'];
   userName: Scalars['String'];
@@ -49,6 +54,14 @@ export type AdminPayload = {
 export type BooleanPayload = {
   __typename?: 'BooleanPayload';
   success?: Maybe<Scalars['Boolean']>;
+};
+
+export type CartType = {
+  __typename?: 'CartType';
+  _id?: Maybe<Scalars['String']>;
+  productId?: Maybe<ProductPayload>;
+  quantity?: Maybe<Scalars['Float']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ChangePassWhenLoginInput = {
@@ -220,6 +233,11 @@ export type IsFavoriteProductInput = {
   productId: Scalars['String'];
 };
 
+export type ListCartType = {
+  __typename?: 'ListCartType';
+  cart?: Maybe<Array<CartType>>;
+};
+
 export type ListCommentInput = {
   id: Scalars['String'];
 };
@@ -256,6 +274,10 @@ export type ListOrderResponse = {
 export type ListUserResponse = {
   __typename?: 'ListUserResponse';
   user: Array<UserDtoType>;
+};
+
+export type LockOrUnLockUserInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type LoginResponse = {
@@ -311,6 +333,7 @@ export type MessageDtoType = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addToCart: BooleanPayload;
   adminLogin: AdminLoginResponse;
   changePassword: ChangePasswordResponse;
   changePasswordWhenLogin: ChangePassWhenLoginType;
@@ -326,15 +349,23 @@ export type Mutation = {
   deleteType: BooleanPayload;
   favoriteProduct: BooleanPayload;
   inValidOtp: ConfirmOtpResponse;
+  lockOrUnLockUser: BooleanPayload;
   loginSocial: LoginResponse;
   loginUser: LoginResponse;
   registerUser: RegisterUserResponse;
-  sendEmailVerify: BooleanPayload;
+  removeFromCart: BooleanPayload;
+  sendEmail: SendEmailResponse;
   sendOtp: SendOtpResponse;
   updateAvatarUser: BooleanPayload;
   updateProduct: BooleanPayload;
   updateProfile: UpdateProfileResponse;
+  verifyEmail: BooleanPayload;
   verifyPhone: VerifyPhoneResponse;
+};
+
+
+export type MutationAddToCartArgs = {
+  input: AddToCartInput;
 };
 
 
@@ -413,6 +444,11 @@ export type MutationInValidOtpArgs = {
 };
 
 
+export type MutationLockOrUnLockUserArgs = {
+  input: LockOrUnLockUserInput;
+};
+
+
 export type MutationLoginSocialArgs = {
   input: LoginSocialInputDto;
 };
@@ -428,7 +464,12 @@ export type MutationRegisterUserArgs = {
 };
 
 
-export type MutationSendEmailVerifyArgs = {
+export type MutationRemoveFromCartArgs = {
+  input: RemoveFromCartInput;
+};
+
+
+export type MutationSendEmailArgs = {
   input: SendPinCodeInput;
 };
 
@@ -450,6 +491,11 @@ export type MutationUpdateProductArgs = {
 
 export type MutationUpdateProfileArgs = {
   input: UpdateProfileInputDto;
+};
+
+
+export type MutationVerifyEmailArgs = {
+  input: VerifyEmailInput;
 };
 
 
@@ -608,6 +654,7 @@ export type Query = {
   getMe: UserDtoType;
   getProduct: GetProductResponse;
   isFavoriteProduct: BooleanPayload;
+  listCart: ListCartType;
   listComment: ListCommentResponse;
   listConversation?: Maybe<ListConversationResponse>;
   listMessage: ListMessageResponse;
@@ -671,6 +718,15 @@ export type RegisterUserResponse = {
   sessionId: Scalars['String'];
 };
 
+export type RemoveFromCartInput = {
+  _id: Scalars['String'];
+};
+
+export type SendEmailResponse = {
+  __typename?: 'SendEmailResponse';
+  sessionId?: Maybe<Scalars['String']>;
+};
+
 export type SendOtpRequestInput = {
   phoneNumber: Scalars['String'];
 };
@@ -684,7 +740,6 @@ export type SendOtpResponse = {
 
 export type SendPinCodeInput = {
   email: Scalars['String'];
-  pinCode: Scalars['String'];
 };
 
 export enum ShippingStatus {
@@ -714,9 +769,9 @@ export type UpdateProductInputDto = {
 
 export type UpdateProfileInputDto = {
   address?: InputMaybe<Scalars['String']>;
+  avatarId?: InputMaybe<Scalars['String']>;
   birthday?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
-  email?: InputMaybe<Scalars['String']>;
   fullName?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Gender>;
 };
@@ -760,6 +815,7 @@ export type UserPayload = {
   createdAt?: Maybe<Scalars['Float']>;
   email?: Maybe<Scalars['String']>;
   fullName?: Maybe<Scalars['String']>;
+  gender?: Maybe<Gender>;
   password?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   twoFactorAuthenticationSecret?: Maybe<Scalars['Boolean']>;
@@ -767,6 +823,11 @@ export type UserPayload = {
   verified?: Maybe<Scalars['Boolean']>;
   verifyEmail?: Maybe<Scalars['Boolean']>;
   verifyPhone?: Maybe<Scalars['Boolean']>;
+};
+
+export type VerifyEmailInput = {
+  otp: Scalars['String'];
+  sessionId: Scalars['String'];
 };
 
 export type VerifyPhoneInputDto = {
@@ -877,6 +938,13 @@ export type ListUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ListUserQuery = { __typename?: 'Query', listUser: { __typename?: 'ListUserResponse', user: Array<{ __typename?: 'UserDtoType', createdAt?: number | null, _id?: string | null, fullName?: string | null, email?: string | null, phoneNumber?: string | null, verifyEmail?: boolean | null, verifyPhone?: boolean | null, verified?: boolean | null, gender?: Gender | null, birthday?: number | null, address?: string | null, provider?: Provider | null, active?: boolean | null, avatarId?: { __typename?: 'Media', _id?: string | null, url?: string | null } | null }> } };
+
+export type LockOrUnLockUserMutationVariables = Exact<{
+  input: LockOrUnLockUserInput;
+}>;
+
+
+export type LockOrUnLockUserMutation = { __typename?: 'Mutation', lockOrUnLockUser: { __typename?: 'BooleanPayload', success?: boolean | null } };
 
 export type GetAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1307,6 +1375,26 @@ export const useListUserQuery = <
     useQuery<ListUserQuery, TError, TData>(
       variables === undefined ? ['listUser'] : ['listUser', variables],
       fetcher<ListUserQuery, ListUserQueryVariables>(client, ListUserDocument, variables, headers),
+      options
+    );
+export const LockOrUnLockUserDocument = `
+    mutation lockOrUnLockUser($input: LockOrUnLockUserInput!) {
+  lockOrUnLockUser(input: $input) {
+    success
+  }
+}
+    `;
+export const useLockOrUnLockUserMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<LockOrUnLockUserMutation, TError, LockOrUnLockUserMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<LockOrUnLockUserMutation, TError, LockOrUnLockUserMutationVariables, TContext>(
+      ['lockOrUnLockUser'],
+      (variables?: LockOrUnLockUserMutationVariables) => fetcher<LockOrUnLockUserMutation, LockOrUnLockUserMutationVariables>(client, LockOrUnLockUserDocument, variables, headers)(),
       options
     );
 export const GetAdminDocument = `

@@ -3,6 +3,9 @@ import { useListUser } from './services/hook/useListUser';
 import { LoadingCenter } from '../Loading';
 import { AiFillDelete } from 'react-icons/ai';
 import DataTable from 'react-data-table-component';
+import { TbLock, TbLockOpen } from 'react-icons/tb';
+import useLockOrUnLock from './services/hook/useLockOrUnLockUser';
+import Notification from '../Notification';
 const customStyles = {
   cells: {
     style: {
@@ -24,7 +27,7 @@ const customStyles = {
 };
 const User = () => {
   const { listUser, isLoading } = useListUser();
-
+  const { handleLockOrUnLock } = useLockOrUnLock();
   const columns = [
     { name: 'ID', selector: (row: any) => row._id },
 
@@ -49,9 +52,15 @@ const User = () => {
       name: 'Tác Vụ',
       cell: (row: any) => (
         <div>
-          <button onClick={() => handleDelete(row)}>
-            <AiFillDelete className="edit-icon" />
-          </button>
+          {row.active ? (
+            <button onClick={() => handleLock(row)}>
+              <TbLockOpen className=" text-2xl text-green-700 hover:bg-orange-200" />
+            </button>
+          ) : (
+            <button onClick={() => handleUnLock(row)}>
+              <TbLock className=" text-2xl text-orange-700 hover:bg-orange-200" />
+            </button>
+          )}
         </div>
       )
     }
@@ -69,9 +78,16 @@ const User = () => {
     );
     setRecords(newData);
   };
-  const handleDelete = (row: any) => {
-    const confirmDelete = window.confirm('Bạn có chắc chắn muốn xoá bản ghi này?');
-    if (confirmDelete) {
+  const handleLock = (row: any) => {
+    const confirmLock = window.confirm('Bạn có chắc chắn muốn khoá tài khoản này?');
+    if (confirmLock) {
+      handleLockOrUnLock({ id: row._id });
+    }
+  };
+  const handleUnLock = (row: any) => {
+    const confirmUnLock = window.confirm('Bạn có chắc chắn muốn bỏ khoá tài khoản này?');
+    if (confirmUnLock) {
+      handleLockOrUnLock({ id: row._id });
     }
   };
   return (

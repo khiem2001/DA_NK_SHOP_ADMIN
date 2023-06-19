@@ -160,7 +160,7 @@ const AddProduct = () => {
             </div>
             <div className="mb-4 w-4/12 p-5">
               <label htmlFor="manufacturer" className="block text-xl font-medium text-black">
-                Nhà sản xuất:
+                Thương Hiệu:
               </label>
               <Field
                 type="text"

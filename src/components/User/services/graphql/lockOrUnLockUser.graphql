@@ -1,0 +1,5 @@
+mutation lockOrUnLockUser($input: LockOrUnLockUserInput!) {
+  lockOrUnLockUser(input: $input) {
+    success
+  }
+}

@@ -3,6 +3,8 @@ import { AiOutlineHome, AiOutlineUser, AiOutlineCreditCard } from 'react-icons/a
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { BsBoxSeam } from 'react-icons/bs';
+import { MdMessage } from 'react-icons/md';
+import { FaProductHunt } from 'react-icons/fa';
 const SideBar = forwardRef<HTMLDivElement, { showNav: boolean }>(({ showNav }, ref: Ref<HTMLDivElement>) => {
   const router = useRouter();
 
@@ -27,7 +29,7 @@ const SideBar = forwardRef<HTMLDivElement, { showNav: boolean }>(({ showNav }, r
               <AiOutlineHome className="h-5 w-5" />
             </div>
             <div>
-              <p>Trang Chủ</p>
+              <p>Tổng Quan</p>
             </div>
           </div>
         </Link>
@@ -44,6 +46,22 @@ const SideBar = forwardRef<HTMLDivElement, { showNav: boolean }>(({ showNav }, r
             </div>
             <div>
               <p>Sản Phẩm</p>
+            </div>
+          </div>
+        </Link>
+        <Link href="/product/type">
+          <div
+            className={`pl-6 py-3 mx-5 rounded text-center cursor-pointer mb-3 flex items-center transition-colors ${
+              router.pathname == '/product/type'
+                ? 'bg-orange-100 text-orange-500'
+                : 'text-white hover:bg-orange-100 hover:text-orange-500'
+            }`}
+          >
+            <div className="mr-2">
+              <FaProductHunt className="h-5 w-5" />
+            </div>
+            <div>
+              <p>Phân Loại</p>
             </div>
           </div>
         </Link>
@@ -76,6 +94,22 @@ const SideBar = forwardRef<HTMLDivElement, { showNav: boolean }>(({ showNav }, r
             </div>
             <div>
               <p>Đơn Hàng</p>
+            </div>
+          </div>
+        </Link>
+        <Link href="/messager">
+          <div
+            className={`pl-6 py-3 mx-5 rounded text-center cursor-pointer mb-3 flex items-center transition-colors ${
+              router.pathname == '/messager'
+                ? 'bg-orange-100 text-orange-500'
+                : 'text-white hover:bg-orange-100 hover:text-orange-500'
+            }`}
+          >
+            <div className="mr-2">
+              <MdMessage className="h-5 w-5" />
+            </div>
+            <div>
+              <p>Cuộc Trò Chuyện</p>
             </div>
           </div>
         </Link>

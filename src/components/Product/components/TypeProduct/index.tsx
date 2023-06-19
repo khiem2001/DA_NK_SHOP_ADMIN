@@ -22,7 +22,7 @@ const ProductType = () => {
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
           onClick={() => {
-            handleCreateType({ name: nameType }), setNameType('');
+            handleCreateType({ name: nameType.toUpperCase() }), setNameType('');
           }}
         >
           {isLoading ? 'Đang Thêm...' : 'Thêm'}
