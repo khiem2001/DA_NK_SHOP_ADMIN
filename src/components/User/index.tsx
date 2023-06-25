@@ -6,6 +6,7 @@ import DataTable from 'react-data-table-component';
 import { TbLock, TbLockOpen } from 'react-icons/tb';
 import useLockOrUnLock from './services/hook/useLockOrUnLockUser';
 import Notification from '../Notification';
+import { Gender } from '@/graphql/generated';
 const customStyles = {
   cells: {
     style: {
@@ -33,10 +34,16 @@ const User = () => {
 
     { name: 'Tên Người Dùng', selector: (row: any) => row.fullName, sortable: true },
     { name: 'Số Điện Thoại', selector: (row: any) => row.phoneNumber, sortable: true },
-    { name: 'Email', selector: (row: any) => row?.email, sortable: true },
+    // { name: 'Email', selector: (row: any) => row?.email, sortable: true },
     { name: 'Nhà cung cấp', selector: (row: any) => row.provider, sortable: true },
-    { name: 'Giới Tính', selector: (row: any) => row.gender, sortable: true },
-    { name: 'Địa Chỉ', selector: (row: any) => row.address, sortable: true },
+    {
+      name: 'Giới Tính',
+      selector: (row: any) => (
+        <>{row.gender === Gender.Female ? 'NỮ' : row.gender === Gender.Male ? 'NAM' : 'KHÔNG XÁC ĐỊNH'} </>
+      ),
+      sortable: true
+    },
+    // { name: 'Địa Chỉ', selector: (row: any) => row.address, sortable: true },
     {
       name: 'Ngày Tạo',
       selector: (row: any) => {

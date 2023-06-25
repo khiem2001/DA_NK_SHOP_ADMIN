@@ -9,6 +9,7 @@ import Link from 'next/link';
 import Avatar from '../Messager/components/Avatar';
 import useConfirmOrder from './services/hook/useConfirmOrder';
 import { usePrintOrder } from './services/hook/usePrintOrder';
+import { MdVisibility } from 'react-icons/md';
 
 const customStyles = {
   cells: {
@@ -35,12 +36,11 @@ const Order = () => {
   const { handleConfirmOrder, confirmOrderLoading } = useConfirmOrder();
   const [orderId, setOrderId] = useState('');
   const { printOrder } = usePrintOrder(orderId);
-
+  console.log(printOrder);
+  const [pdfUrl, setPdfUrl] = useState('');
   useEffect(() => {
-    if (printOrder && printOrder.pdfPath) {
-      console.log(printOrder);
-      window.open('D:/Đồ Án Tốt Nghiệp/OrderPdf/order.1686222652286.pdf', '_blank');
-    }
+    // if (printOrder) {
+    // }
   }, [printOrder]);
 
   const columns: any[] = [
@@ -73,10 +73,14 @@ const Order = () => {
       cell: (row: any) => (
         <div>
           {row.items.map((obj: any) => (
-            <Link href={'/products/' + obj.id._id} className="flex ">
-              <ImageItem src={`${process.env.NEXT_PUBLIC_MEDIA_ENDPOINT}${obj?.id?.image?.url || ''}`} />
-              <div className="ml-2 text-blue-700 text-sm">{obj.id.name}</div>
-            </Link>
+            <div className="flex " key={obj.id?._id}>
+              <div className="w-2 h-2 rounded-full bg-black my-auto mr-1"> </div>
+              <ImageItem
+                src={`${process.env.NEXT_PUBLIC_MEDIA_ENDPOINT}${obj?.id?.image?.url || ''}`}
+                className="my-1"
+              />
+              {/* <div className="ml-2 text-blue-700 text-sm">{obj.id?.name}</div> */}
+            </div>
           ))}
         </div>
       )
@@ -109,19 +113,19 @@ const Order = () => {
         )
     },
 
-    {
-      name: 'Địa chỉ nhận hàng',
-      selector: (row: any) => <div className="text-sm overflow-x-auto whitespace-nowrap">{row.shippingAddress}</div>
-    },
+    // {
+    //   name: 'Địa chỉ nhận hàng',
+    //   selector: (row: any) => <div className="text-sm overflow-x-auto whitespace-nowrap">{row.shippingAddress}</div>
+    // },
     {
       name: 'Xác Nhận Đơn Hàng',
       selector: (row: any) => (
-        <div>
+        <div className="flex">
+          <Link href="/" className="text-2xl mr-3 edit-icon">
+            <MdVisibility />
+          </Link>
           {row.shippingStatus === ShippingStatus.NotShipped ? (
-            <button
-              className="text-white bg-orange-700 p-1 text-sm rounded-md"
-              onClick={() => handleConfirmOrder(row._id)}
-            >
+            <button className="text-white bg-orange-700 p-1 text-sm rounded-md" onClick={() => handleConfirm(row._id)}>
               Xác Nhận
             </button>
           ) : row.shippingStatus === ShippingStatus.Shipping ? (
@@ -129,6 +133,7 @@ const Order = () => {
           ) : (
             'Đơn hàng đã được giao'
           )}
+
           <button className="text-white bg-cyan-700 ml-2 p-1 text-sm rounded-md" onClick={() => setOrderId(row._id)}>
             In HD
           </button>
@@ -142,13 +147,18 @@ const Order = () => {
     setRecords(listOrder);
   }, [isLoading, listOrder]);
   const handleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const filterValue = e.target.value.toLowerCase();
-    const newData = listOrder.filter(row =>
-      row.items?.some((obj: any) => obj.id.name.toLowerCase().includes(filterValue))
+    const newData = listOrder?.filter(
+      row =>
+        row.code?.includes(e.target.value) || row.userId?.fullName?.toLowerCase().includes(e.target.value.toLowerCase())
     );
     setRecords(newData);
   };
-
+  const handleConfirm = (_id: any) => {
+    const confirmOrder = window.confirm('Bạn có chắc chắn xác nhận đơn hàng này?');
+    if (confirmOrder) {
+      handleConfirmOrder(_id);
+    }
+  };
   return (
     <div className="flex justify-between flex-col  mb-12 ">
       <div className="text-2xl mt-4 mb-4 text-orange-500">Danh Sách Đơn Hàng</div>

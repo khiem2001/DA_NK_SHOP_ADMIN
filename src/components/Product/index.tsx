@@ -9,6 +9,7 @@ import { LoadingCenter } from '../Loading';
 import useProductStore, { ProductStore } from '@/store/useProductStore';
 import { useRouter } from 'next/router';
 import useDeleteProduct from './services/hook/useDeleteProduct';
+import { MdVisibility } from 'react-icons/md';
 const customStyles = {
   cells: {
     style: {
@@ -58,21 +59,24 @@ const Product = () => {
       },
       sortable: true
     },
-    {
-      name: 'Ngày Tạo',
-      selector: (row: any) => {
-        const createdAt = new Date(row.createdAt);
-        const options = { timeZone: 'UTC' };
-        createdAt.setUTCHours(createdAt.getUTCHours() + 7); // Thêm 7 giờ để chuyển đổi múi giờ
-        const localDateTime = createdAt.toLocaleString('en-US', options);
-        return localDateTime;
-      },
-      sortable: true
-    },
+    // {
+    //   name: 'Ngày Tạo',
+    //   selector: (row: any) => {
+    //     const createdAt = new Date(row.createdAt);
+    //     const options = { timeZone: 'UTC' };
+    //     createdAt.setUTCHours(createdAt.getUTCHours() + 7); // Thêm 7 giờ để chuyển đổi múi giờ
+    //     const localDateTime = createdAt.toLocaleString('en-US', options);
+    //     return localDateTime;
+    //   },
+    //   sortable: true
+    // },
     {
       name: 'Tác Vụ',
       cell: (row: any) => (
-        <div>
+        <div className="flex">
+          <Link href="/" className="text-2xl mr-3 edit-icon">
+            <MdVisibility />
+          </Link>
           <button className="mr-5" onClick={() => handleEdit(row)}>
             <AiFillEdit className="edit-icon" />
           </button>
