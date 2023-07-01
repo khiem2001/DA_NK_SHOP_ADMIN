@@ -1,0 +1,16 @@
+query getListComment($input: ListCommentInput!) {
+  listComment(input: $input) {
+    data {
+      _id
+      user {
+        avatarId {
+          url
+        }
+        fullName
+      }
+      message
+      countFeedback
+      createdAt
+    }
+  }
+}

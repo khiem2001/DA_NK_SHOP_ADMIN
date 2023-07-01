@@ -59,8 +59,10 @@ export type BooleanPayload = {
 export type CartType = {
   __typename?: 'CartType';
   _id?: Maybe<Scalars['String']>;
-  productId?: Maybe<ProductPayload>;
+  price?: Maybe<Scalars['Float']>;
+  productId?: Maybe<Scalars['String']>;
   quantity?: Maybe<Scalars['Float']>;
+  status?: Maybe<Scalars['Boolean']>;
   userId?: Maybe<Scalars['String']>;
 };
 
@@ -89,6 +91,7 @@ export type ChangePasswordResponse = {
 export type CommentResponse = {
   __typename?: 'CommentResponse';
   _id: Scalars['String'];
+  countFeedback?: Maybe<Scalars['Float']>;
   createdAt?: Maybe<Scalars['Float']>;
   message: Scalars['String'];
   parentId?: Maybe<Scalars['String']>;
@@ -256,6 +259,10 @@ export type ListConversationResponse = {
   data?: Maybe<Array<ConversationDtoType>>;
 };
 
+export type ListFeedbackInput = {
+  parentId: Scalars['String'];
+};
+
 export type ListMessageInput = {
   conversationId: Scalars['String'];
   pagination: PaginationBaseInput;
@@ -337,10 +344,12 @@ export type Mutation = {
   adminLogin: AdminLoginResponse;
   changePassword: ChangePasswordResponse;
   changePasswordWhenLogin: ChangePassWhenLoginType;
+  clearCart: BooleanPayload;
   confirmOrder: BooleanPayload;
   confirmOtp: ConfirmOtpResponse;
   createAdmin: BooleanPayload;
   createComment: CommentResponse;
+  createCommentAdmin: CommentResponse;
   createConversation: CreateConversationType;
   createPayment: CreatePaymentResponse;
   createProduct: BooleanPayload;
@@ -352,6 +361,7 @@ export type Mutation = {
   lockOrUnLockUser: BooleanPayload;
   loginSocial: LoginResponse;
   loginUser: LoginResponse;
+  printOrder: PrintOrderType;
   registerUser: RegisterUserResponse;
   removeFromCart: BooleanPayload;
   sendEmail: SendEmailResponse;
@@ -400,6 +410,11 @@ export type MutationCreateAdminArgs = {
 
 
 export type MutationCreateCommentArgs = {
+  input: CreateCommentInput;
+};
+
+
+export type MutationCreateCommentAdminArgs = {
   input: CreateCommentInput;
 };
 
@@ -456,6 +471,11 @@ export type MutationLoginSocialArgs = {
 
 export type MutationLoginUserArgs = {
   input: LoginUserInputDto;
+};
+
+
+export type MutationPrintOrderArgs = {
+  input: ConfirmOrderInput;
 };
 
 
@@ -648,6 +668,7 @@ export enum Provider {
 
 export type Query = {
   __typename?: 'Query';
+  detailOrder: OrderDto;
   getAdmin: AdminPayload;
   getIdAdmin: GetIdAdminResponse;
   getListProduct: GetListProductResponse;
@@ -657,12 +678,17 @@ export type Query = {
   listCart: ListCartType;
   listComment: ListCommentResponse;
   listConversation?: Maybe<ListConversationResponse>;
+  listFeedback: ListCommentResponse;
   listMessage: ListMessageResponse;
   listOrderAdmin: ListOrderResponse;
   listOrderUser: ListOrderResponse;
   listType: GetListTypeResponse;
   listUser: ListUserResponse;
-  printOrder: PrintOrderType;
+};
+
+
+export type QueryDetailOrderArgs = {
+  input: ConfirmOrderInput;
 };
 
 
@@ -691,13 +717,13 @@ export type QueryListConversationArgs = {
 };
 
 
-export type QueryListMessageArgs = {
-  input: ListMessageInput;
+export type QueryListFeedbackArgs = {
+  input: ListFeedbackInput;
 };
 
 
-export type QueryPrintOrderArgs = {
-  input: ConfirmOrderInput;
+export type QueryListMessageArgs = {
+  input: ListMessageInput;
 };
 
 export type ReadProductInputDto = {
@@ -868,17 +894,31 @@ export type ConfirmOrderMutationVariables = Exact<{
 
 export type ConfirmOrderMutation = { __typename?: 'Mutation', confirmOrder: { __typename?: 'BooleanPayload', success?: boolean | null } };
 
+export type DetailOrderQueryVariables = Exact<{
+  input: ConfirmOrderInput;
+}>;
+
+
+export type DetailOrderQuery = { __typename?: 'Query', detailOrder: { __typename?: 'OrderDto', _id?: string | null, code?: string | null, createdAt?: number | null, description?: string | null, status?: OrderStatus | null, subTotal?: number | null, shippingStatus?: ShippingStatus | null, shippingAddress?: string | null, paymentMethod?: PaymentMethod | null, amount?: number | null, items?: Array<{ __typename?: 'OrderItemResponse', name?: string | null, quantity: number, id?: { __typename?: 'ProductPayload', _id?: string | null, price?: number | null, name?: string | null, image?: { __typename?: 'Media', url?: string | null } | null } | null }> | null, transaction?: { __typename?: 'OrderTransactionType', id?: string | null, gateway?: string | null } | null, userId?: { __typename?: 'UserDtoType', fullName?: string | null, phoneNumber?: string | null, avatarId?: { __typename?: 'Media', url?: string | null } | null } | null } };
+
 export type ListOrderAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ListOrderAdminQuery = { __typename?: 'Query', listOrderAdmin: { __typename?: 'ListOrderResponse', orders?: Array<{ __typename?: 'OrderDto', _id?: string | null, code?: string | null, status?: OrderStatus | null, amount?: number | null, description?: string | null, couponCode?: string | null, discountAmount?: number | null, subTotal?: number | null, paymentMethod?: PaymentMethod | null, shippingStatus?: ShippingStatus | null, shippingAddress?: string | null, createdAt?: number | null, transaction?: { __typename?: 'OrderTransactionType', gateway?: string | null, id?: string | null, time?: number | null } | null, items?: Array<{ __typename?: 'OrderItemResponse', name?: string | null, quantity: number, price: number, id?: { __typename?: 'ProductPayload', _id?: string | null, name?: string | null, image?: { __typename?: 'Media', url?: string | null } | null } | null }> | null, userId?: { __typename?: 'UserDtoType', _id?: string | null, fullName?: string | null, avatarId?: { __typename?: 'Media', url?: string | null } | null } | null }> | null } };
 
-export type PrintOrderQueryVariables = Exact<{
+export type PrintOrderMutationVariables = Exact<{
   input: ConfirmOrderInput;
 }>;
 
 
-export type PrintOrderQuery = { __typename?: 'Query', printOrder: { __typename?: 'PrintOrderType', pdfPath?: string | null } };
+export type PrintOrderMutation = { __typename?: 'Mutation', printOrder: { __typename?: 'PrintOrderType', pdfPath?: string | null } };
+
+export type CreateCommentAdminMutationVariables = Exact<{
+  input: CreateCommentInput;
+}>;
+
+
+export type CreateCommentAdminMutation = { __typename?: 'Mutation', createCommentAdmin: { __typename?: 'CommentResponse', _id: string, message: string, productId?: string | null } };
 
 export type CreateProductMutationVariables = Exact<{
   input: CreateProductInputDto;
@@ -907,6 +947,20 @@ export type DeleteTypeMutationVariables = Exact<{
 
 
 export type DeleteTypeMutation = { __typename?: 'Mutation', deleteType: { __typename?: 'BooleanPayload', success?: boolean | null } };
+
+export type GetListCommentQueryVariables = Exact<{
+  input: ListCommentInput;
+}>;
+
+
+export type GetListCommentQuery = { __typename?: 'Query', listComment: { __typename?: 'ListCommentResponse', data?: Array<{ __typename?: 'CommentResponse', _id: string, message: string, countFeedback?: number | null, createdAt?: number | null, user?: { __typename?: 'UserDtoType', fullName?: string | null, avatarId?: { __typename?: 'Media', url?: string | null } | null } | null }> | null } };
+
+export type GetListFeedbackQueryVariables = Exact<{
+  input: ListFeedbackInput;
+}>;
+
+
+export type GetListFeedbackQuery = { __typename?: 'Query', listFeedback: { __typename?: 'ListCommentResponse', data?: Array<{ __typename?: 'CommentResponse', _id: string, parentId?: string | null, message: string, createdAt?: number | null, user?: { __typename?: 'UserDtoType', fullName?: string | null, avatarId?: { __typename?: 'Media', url?: string | null } | null } | null }> | null } };
 
 export type GetListProductQueryVariables = Exact<{
   input: GetListProductInput;
@@ -1063,6 +1117,59 @@ export const useConfirmOrderMutation = <
       (variables?: ConfirmOrderMutationVariables) => fetcher<ConfirmOrderMutation, ConfirmOrderMutationVariables>(client, ConfirmOrderDocument, variables, headers)(),
       options
     );
+export const DetailOrderDocument = `
+    query detailOrder($input: ConfirmOrderInput!) {
+  detailOrder(input: $input) {
+    _id
+    code
+    createdAt
+    description
+    status
+    subTotal
+    shippingStatus
+    shippingAddress
+    paymentMethod
+    items {
+      id {
+        _id
+        price
+        name
+        image {
+          url
+        }
+      }
+      name
+      quantity
+    }
+    transaction {
+      id
+      gateway
+    }
+    amount
+    userId {
+      fullName
+      phoneNumber
+      avatarId {
+        url
+      }
+    }
+  }
+}
+    `;
+export const useDetailOrderQuery = <
+      TData = DetailOrderQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: DetailOrderQueryVariables,
+      options?: UseQueryOptions<DetailOrderQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<DetailOrderQuery, TError, TData>(
+      ['detailOrder', variables],
+      fetcher<DetailOrderQuery, DetailOrderQueryVariables>(client, DetailOrderDocument, variables, headers),
+      options
+    );
 export const ListOrderAdminDocument = `
     query listOrderAdmin {
   listOrderAdmin {
@@ -1122,24 +1229,45 @@ export const useListOrderAdminQuery = <
       options
     );
 export const PrintOrderDocument = `
-    query printOrder($input: ConfirmOrderInput!) {
+    mutation printOrder($input: ConfirmOrderInput!) {
   printOrder(input: $input) {
     pdfPath
   }
 }
     `;
-export const usePrintOrderQuery = <
-      TData = PrintOrderQuery,
-      TError = unknown
+export const usePrintOrderMutation = <
+      TError = unknown,
+      TContext = unknown
     >(
       client: GraphQLClient,
-      variables: PrintOrderQueryVariables,
-      options?: UseQueryOptions<PrintOrderQuery, TError, TData>,
+      options?: UseMutationOptions<PrintOrderMutation, TError, PrintOrderMutationVariables, TContext>,
       headers?: RequestInit['headers']
     ) =>
-    useQuery<PrintOrderQuery, TError, TData>(
-      ['printOrder', variables],
-      fetcher<PrintOrderQuery, PrintOrderQueryVariables>(client, PrintOrderDocument, variables, headers),
+    useMutation<PrintOrderMutation, TError, PrintOrderMutationVariables, TContext>(
+      ['printOrder'],
+      (variables?: PrintOrderMutationVariables) => fetcher<PrintOrderMutation, PrintOrderMutationVariables>(client, PrintOrderDocument, variables, headers)(),
+      options
+    );
+export const CreateCommentAdminDocument = `
+    mutation createCommentAdmin($input: CreateCommentInput!) {
+  createCommentAdmin(input: $input) {
+    _id
+    message
+    productId
+  }
+}
+    `;
+export const useCreateCommentAdminMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<CreateCommentAdminMutation, TError, CreateCommentAdminMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<CreateCommentAdminMutation, TError, CreateCommentAdminMutationVariables, TContext>(
+      ['createCommentAdmin'],
+      (variables?: CreateCommentAdminMutationVariables) => fetcher<CreateCommentAdminMutation, CreateCommentAdminMutationVariables>(client, CreateCommentAdminDocument, variables, headers)(),
       options
     );
 export const CreateProductDocument = `
@@ -1220,6 +1348,70 @@ export const useDeleteTypeMutation = <
     useMutation<DeleteTypeMutation, TError, DeleteTypeMutationVariables, TContext>(
       ['deleteType'],
       (variables?: DeleteTypeMutationVariables) => fetcher<DeleteTypeMutation, DeleteTypeMutationVariables>(client, DeleteTypeDocument, variables, headers)(),
+      options
+    );
+export const GetListCommentDocument = `
+    query getListComment($input: ListCommentInput!) {
+  listComment(input: $input) {
+    data {
+      _id
+      user {
+        avatarId {
+          url
+        }
+        fullName
+      }
+      message
+      countFeedback
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetListCommentQuery = <
+      TData = GetListCommentQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetListCommentQueryVariables,
+      options?: UseQueryOptions<GetListCommentQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetListCommentQuery, TError, TData>(
+      ['getListComment', variables],
+      fetcher<GetListCommentQuery, GetListCommentQueryVariables>(client, GetListCommentDocument, variables, headers),
+      options
+    );
+export const GetListFeedbackDocument = `
+    query getListFeedback($input: ListFeedbackInput!) {
+  listFeedback(input: $input) {
+    data {
+      _id
+      user {
+        avatarId {
+          url
+        }
+        fullName
+      }
+      parentId
+      message
+      createdAt
+    }
+  }
+}
+    `;
+export const useGetListFeedbackQuery = <
+      TData = GetListFeedbackQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetListFeedbackQueryVariables,
+      options?: UseQueryOptions<GetListFeedbackQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetListFeedbackQuery, TError, TData>(
+      ['getListFeedback', variables],
+      fetcher<GetListFeedbackQuery, GetListFeedbackQueryVariables>(client, GetListFeedbackDocument, variables, headers),
       options
     );
 export const GetListProductDocument = `

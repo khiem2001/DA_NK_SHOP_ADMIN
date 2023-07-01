@@ -1,4 +1,4 @@
-query printOrder($input: ConfirmOrderInput!) {
+mutation printOrder($input: ConfirmOrderInput!) {
   printOrder(input: $input) {
     pdfPath
   }

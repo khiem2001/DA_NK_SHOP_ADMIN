@@ -1,0 +1,16 @@
+query getListFeedback($input: ListFeedbackInput!) {
+  listFeedback(input: $input) {
+    data {
+      _id
+      user {
+        avatarId {
+          url
+        }
+        fullName
+      }
+      parentId
+      message
+      createdAt
+    }
+  }
+}

@@ -1,0 +1,37 @@
+query detailOrder($input: ConfirmOrderInput!) {
+  detailOrder(input: $input) {
+    _id
+    code
+    createdAt
+    description
+    status
+    subTotal
+    shippingStatus
+    shippingAddress
+    paymentMethod
+    items {
+      id {
+        _id
+        price
+        name
+        image {
+          url
+        }
+      }
+      name
+      quantity
+    }
+    transaction {
+      id
+      gateway
+    }
+    amount
+    userId {
+      fullName
+      phoneNumber
+      avatarId {
+        url
+      }
+    }
+  }
+}

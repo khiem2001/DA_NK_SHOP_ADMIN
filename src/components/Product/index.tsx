@@ -74,7 +74,7 @@ const Product = () => {
       name: 'Tác Vụ',
       cell: (row: any) => (
         <div className="flex">
-          <Link href="/" className="text-2xl mr-3 edit-icon">
+          <Link href={`/product/${row._id}`} className="text-2xl mr-3 edit-icon">
             <MdVisibility />
           </Link>
           <button className="mr-5" onClick={() => handleEdit(row)}>

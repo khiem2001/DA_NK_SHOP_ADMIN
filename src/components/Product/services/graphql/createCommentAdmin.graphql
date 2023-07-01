@@ -1,0 +1,7 @@
+mutation createCommentAdmin($input: CreateCommentInput!) {
+  createCommentAdmin(input: $input) {
+    _id
+    message
+    productId
+  }
+}

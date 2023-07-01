@@ -8,8 +8,10 @@ import { ImageItem } from './styled';
 import Link from 'next/link';
 import Avatar from '../Messager/components/Avatar';
 import useConfirmOrder from './services/hook/useConfirmOrder';
-import { usePrintOrder } from './services/hook/usePrintOrder';
+
 import { MdVisibility } from 'react-icons/md';
+import usePrintOrder from './services/hook/usePrintOrder';
+import { AiFillPrinter } from 'react-icons/ai';
 
 const customStyles = {
   cells: {
@@ -34,14 +36,7 @@ const customStyles = {
 const Order = () => {
   const { listOrder, isLoading } = useListOrderAdmin();
   const { handleConfirmOrder, confirmOrderLoading } = useConfirmOrder();
-  const [orderId, setOrderId] = useState('');
-  const { printOrder } = usePrintOrder(orderId);
-  console.log(printOrder);
-  const [pdfUrl, setPdfUrl] = useState('');
-  useEffect(() => {
-    // if (printOrder) {
-    // }
-  }, [printOrder]);
+  const { handlePrintOrder } = usePrintOrder();
 
   const columns: any[] = [
     {
@@ -121,7 +116,7 @@ const Order = () => {
       name: 'Xác Nhận Đơn Hàng',
       selector: (row: any) => (
         <div className="flex">
-          <Link href="/" className="text-2xl mr-3 edit-icon">
+          <Link href={`/order/${row._id}`} className="text-2xl mr-3 edit-icon">
             <MdVisibility />
           </Link>
           {row.shippingStatus === ShippingStatus.NotShipped ? (
@@ -134,8 +129,8 @@ const Order = () => {
             'Đơn hàng đã được giao'
           )}
 
-          <button className="text-white bg-cyan-700 ml-2 p-1 text-sm rounded-md" onClick={() => setOrderId(row._id)}>
-            In HD
+          <button className="text-white  p-1 text-2xl rounded-md" onClick={() => handlePrint(row._id)}>
+            <AiFillPrinter className="text-cyan-700 ml-2" />
           </button>
         </div>
       )
@@ -157,6 +152,12 @@ const Order = () => {
     const confirmOrder = window.confirm('Bạn có chắc chắn xác nhận đơn hàng này?');
     if (confirmOrder) {
       handleConfirmOrder(_id);
+    }
+  };
+  const handlePrint = (_id: any) => {
+    const print = window.confirm('Bạn có chắc chắc in đơn hàng này?');
+    if (print) {
+      handlePrintOrder(_id);
     }
   };
   return (
