@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { graphqlClientRequest } from '@/graphql/services/graphql-client';
 import { DetailOrderDocument, ListOrderAdminDocument, PaymentMethod, ShippingStatus } from '@/graphql/generated';
 import { da } from 'date-fns/locale';
@@ -10,6 +10,7 @@ import useConfirmOrder from '@/components/Order/services/hook/useConfirmOrder';
 import { useRouter } from 'next/router';
 import { AiFillPrinter } from 'react-icons/ai';
 import usePrintOrder from '@/components/Order/services/hook/usePrintOrder';
+import ModalConfirm from '@/components/ModalConfirm';
 
 export async function getStaticPaths() {
   const queryClient = await graphqlClientRequest(true);
@@ -56,22 +57,25 @@ const DetailOrder = ({ data }: any) => {
   const router = useRouter();
   const detailOrder = data.detailOrder;
 
+  const [isOpen, setIsOpen] = useState<any>(false);
+  const [prop, setProp] = useState<any>({});
+  const [onOK, setOnOK] = useState<any>();
+
   const createdAt = new Date(detailOrder.createdAt);
   const options = { timeZone: 'UTC' };
   createdAt.setUTCHours(createdAt.getUTCHours() + 7); // Thêm 7 giờ để chuyển đổi múi giờ
   const localDateTime = createdAt.toLocaleString('en-US', options);
-  const handleConfirm = (_id: any) => {
-    const confirmOrder = window.confirm('Bạn có chắc chắn xác nhận đơn hàng này?');
-    if (confirmOrder) {
-      handleConfirmOrder(_id);
-      router.push(`./${_id}`);
-    }
+  const handleConfirm = () => {
+    handleConfirmOrder(detailOrder._id);
+    setIsOpen(false);
+    router.push(`./${detailOrder._id}`);
   };
   const handlePrint = () => {
-    const print = window.confirm('Bạn có chắc chắc in đơn hàng này?');
-    if (print) {
-      handlePrintOrder(detailOrder._id);
-    }
+    handlePrintOrder(detailOrder._id);
+    setIsOpen(false);
+  };
+  const handleClose = () => {
+    setIsOpen(false);
   };
   return (
     <>
@@ -80,7 +84,14 @@ const DetailOrder = ({ data }: any) => {
         {detailOrder.shippingStatus === ShippingStatus.NotShipped ? (
           <button
             className="text-white ml-5 bg-orange-700 p-1 text-sm rounded-md font-thin "
-            onClick={() => handleConfirm(detailOrder._id)}
+            onClick={() => {
+              setIsOpen(true);
+              setProp({
+                title: 'XÁC NHẬN',
+                content: 'Bạn có chắc chắn xác nhận đơn hàng này?'
+              });
+              setOnOK(() => handleConfirm);
+            }}
           >
             Xác Nhận Đơn Hàng
           </button>
@@ -90,7 +101,14 @@ const DetailOrder = ({ data }: any) => {
 
         <button
           className="text-white  flex items-center ml-5 bg-cyan-700  font-thin p-1 text-sm rounded-md"
-          onClick={handlePrint}
+          onClick={() => {
+            setIsOpen(true);
+            setProp({
+              title: 'XÁC NHẬN',
+              content: 'Bạn có chắc chắn in đơn hàng này?'
+            });
+            setOnOK(() => handlePrint);
+          }}
         >
           <AiFillPrinter /> <span className="ml-2">In Hoá Đơn</span>
         </button>
@@ -163,6 +181,7 @@ const DetailOrder = ({ data }: any) => {
           </div>
         </div>
       </div>
+      <ModalConfirm isOpen={isOpen} onOk={onOK} onCancel={handleClose} prop={prop} />
     </>
   );
 };

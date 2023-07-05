@@ -7,6 +7,7 @@ import { TbLock, TbLockOpen } from 'react-icons/tb';
 import useLockOrUnLock from './services/hook/useLockOrUnLockUser';
 import Notification from '../Notification';
 import { Gender } from '@/graphql/generated';
+import ModalConfirm from '../ModalConfirm';
 const customStyles = {
   cells: {
     style: {
@@ -29,6 +30,9 @@ const customStyles = {
 const User = () => {
   const { listUser, isLoading } = useListUser();
   const { handleLockOrUnLock } = useLockOrUnLock();
+  const [isOpen, setIsOpen] = useState<any>(false);
+  const [prop, setProp] = useState<any>({});
+  const [id, setId] = useState<any>();
   const columns = [
     { name: 'ID', selector: (row: any) => row._id },
 
@@ -60,11 +64,29 @@ const User = () => {
       cell: (row: any) => (
         <div>
           {row.active ? (
-            <button onClick={() => handleLock(row)}>
+            <button
+              onClick={() => {
+                setId(row._id);
+                setIsOpen(true);
+                setProp({
+                  title: 'XÁC NHẬN',
+                  content: 'Bạn có chắc chắn khoá người dùng này?'
+                });
+              }}
+            >
               <TbLockOpen className=" text-2xl text-green-700 hover:bg-orange-200" />
             </button>
           ) : (
-            <button onClick={() => handleUnLock(row)}>
+            <button
+              onClick={() => {
+                setId(row._id);
+                setIsOpen(true);
+                setProp({
+                  title: 'XÁC NHẬN',
+                  content: 'Bạn có chắc chắn mở khoá người dùng này?'
+                });
+              }}
+            >
               <TbLock className=" text-2xl text-orange-700 hover:bg-orange-200" />
             </button>
           )}
@@ -85,40 +107,40 @@ const User = () => {
     );
     setRecords(newData);
   };
-  const handleLock = (row: any) => {
-    const confirmLock = window.confirm('Bạn có chắc chắn muốn khoá tài khoản này?');
-    if (confirmLock) {
-      handleLockOrUnLock({ id: row._id });
-    }
+
+  const submitLockOrUnLock = () => {
+    setIsOpen(false);
+    handleLockOrUnLock({ id });
   };
-  const handleUnLock = (row: any) => {
-    const confirmUnLock = window.confirm('Bạn có chắc chắn muốn bỏ khoá tài khoản này?');
-    if (confirmUnLock) {
-      handleLockOrUnLock({ id: row._id });
-    }
+  const handleClose = () => {
+    setIsOpen(false);
   };
   return (
     <>
       {isLoading ? (
         <LoadingCenter />
       ) : (
-        <div>
-          <input
-            className="py-4 px-4 w-2/4 outline-none mb-5"
-            type="text"
-            placeholder="Tìm kiếm..."
-            onChange={handleFilter}
-          />
-          <DataTable
-            columns={columns}
-            data={records || []}
-            pagination
-            striped
-            customStyles={customStyles}
-            responsive
-            highlightOnHover
-          />
-        </div>
+        <>
+          {' '}
+          <div>
+            <input
+              className="py-4 px-4 w-2/4 outline-none mb-5"
+              type="text"
+              placeholder="Tìm kiếm..."
+              onChange={handleFilter}
+            />
+            <DataTable
+              columns={columns}
+              data={records || []}
+              pagination
+              striped
+              customStyles={customStyles}
+              responsive
+              highlightOnHover
+            />
+          </div>
+          <ModalConfirm isOpen={isOpen} onOk={submitLockOrUnLock} onCancel={handleClose} prop={prop} />
+        </>
       )}
     </>
   );

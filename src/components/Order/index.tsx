@@ -12,6 +12,7 @@ import useConfirmOrder from './services/hook/useConfirmOrder';
 import { MdVisibility } from 'react-icons/md';
 import usePrintOrder from './services/hook/usePrintOrder';
 import { AiFillPrinter } from 'react-icons/ai';
+import ModalConfirm from '../ModalConfirm';
 
 const customStyles = {
   cells: {
@@ -37,6 +38,10 @@ const Order = () => {
   const { listOrder, isLoading } = useListOrderAdmin();
   const { handleConfirmOrder, confirmOrderLoading } = useConfirmOrder();
   const { handlePrintOrder } = usePrintOrder();
+  const [isOpen, setIsOpen] = useState<any>(false);
+  const [prop, setProp] = useState<any>({});
+  const [id, setId] = useState<any>();
+  const [onOK, setOnOK] = useState<any>();
 
   const columns: any[] = [
     {
@@ -120,7 +125,18 @@ const Order = () => {
             <MdVisibility />
           </Link>
           {row.shippingStatus === ShippingStatus.NotShipped ? (
-            <button className="text-white bg-orange-700 p-1 text-sm rounded-md" onClick={() => handleConfirm(row._id)}>
+            <button
+              className="text-white bg-orange-700 p-1 text-sm rounded-md"
+              onClick={() => {
+                setId(row._id);
+                setIsOpen(true);
+                setProp({
+                  title: 'XÁC NHẬN',
+                  content: 'Bạn có chắc chắn xác nhận đơn hàng này?'
+                });
+                setOnOK(() => handleConfirm);
+              }}
+            >
               Xác Nhận
             </button>
           ) : row.shippingStatus === ShippingStatus.Shipping ? (
@@ -129,7 +145,18 @@ const Order = () => {
             'Đơn hàng đã được giao'
           )}
 
-          <button className="text-white  p-1 text-2xl rounded-md" onClick={() => handlePrint(row._id)}>
+          <button
+            className="text-white  p-1 text-2xl rounded-md"
+            onClick={() => {
+              setId(row._id);
+              setIsOpen(true);
+              setProp({
+                title: 'XÁC NHẬN',
+                content: 'Bạn có chắc chắn in đơn hàng này?'
+              });
+              setOnOK(() => handlePrint);
+            }}
+          >
             <AiFillPrinter className="text-cyan-700 ml-2" />
           </button>
         </div>
@@ -148,41 +175,43 @@ const Order = () => {
     );
     setRecords(newData);
   };
-  const handleConfirm = (_id: any) => {
-    const confirmOrder = window.confirm('Bạn có chắc chắn xác nhận đơn hàng này?');
-    if (confirmOrder) {
-      handleConfirmOrder(_id);
-    }
+  const handleConfirm = () => {
+    setIsOpen(false);
+    handleConfirmOrder(id);
   };
-  const handlePrint = (_id: any) => {
-    const print = window.confirm('Bạn có chắc chắc in đơn hàng này?');
-    if (print) {
-      handlePrintOrder(_id);
-    }
+  const handlePrint = () => {
+    setIsOpen(false);
+    handlePrintOrder(id);
+  };
+  const handleClose = () => {
+    setIsOpen(false);
   };
   return (
-    <div className="flex justify-between flex-col  mb-12 ">
-      <div className="text-2xl mt-4 mb-4 text-orange-500">Danh Sách Đơn Hàng</div>
-      <input
-        className="py-4 px-4 w-2/4 outline-none mb-12"
-        type="text"
-        placeholder="Tìm kiếm..."
-        onChange={handleFilter}
-      />
-      {isLoading ? (
-        <LoadingCenter />
-      ) : (
-        <DataTable
-          columns={columns}
-          data={records || []}
-          pagination
-          striped
-          customStyles={customStyles}
-          responsive
-          highlightOnHover
+    <>
+      <div className="flex justify-between flex-col  mb-12 ">
+        <div className="text-2xl mt-4 mb-4 text-orange-500">Danh Sách Đơn Hàng</div>
+        <input
+          className="py-4 px-4 w-2/4 outline-none mb-12"
+          type="text"
+          placeholder="Tìm kiếm..."
+          onChange={handleFilter}
         />
-      )}
-    </div>
+        {isLoading ? (
+          <LoadingCenter />
+        ) : (
+          <DataTable
+            columns={columns}
+            data={records || []}
+            pagination
+            striped
+            customStyles={customStyles}
+            responsive
+            highlightOnHover
+          />
+        )}
+      </div>
+      <ModalConfirm isOpen={isOpen} onOk={onOK} onCancel={handleClose} prop={prop} />
+    </>
   );
 };
 

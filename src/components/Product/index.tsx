@@ -10,6 +10,7 @@ import useProductStore, { ProductStore } from '@/store/useProductStore';
 import { useRouter } from 'next/router';
 import useDeleteProduct from './services/hook/useDeleteProduct';
 import { MdVisibility } from 'react-icons/md';
+import ModalConfirm from '../ModalConfirm';
 const customStyles = {
   cells: {
     style: {
@@ -38,6 +39,9 @@ const Product = () => {
   });
   const { handleDeleteProduct } = useDeleteProduct();
   const { setProductId } = useProductStore(store => store as ProductStore);
+  const [isOpen, setIsOpen] = useState<any>(false);
+  const [prop, setProp] = useState<any>({});
+  const [id, setId] = useState<any>();
   const router = useRouter();
   const columns = [
     { name: 'ID', selector: (row: any) => row._id },
@@ -80,7 +84,16 @@ const Product = () => {
           <button className="mr-5" onClick={() => handleEdit(row)}>
             <AiFillEdit className="edit-icon" />
           </button>
-          <button onClick={() => handleDelete(row)}>
+          <button
+            onClick={() => {
+              setId(row._id);
+              setIsOpen(true);
+              setProp({
+                title: 'XÁC NHẬN',
+                content: 'Bạn có chắc chắn xoá sản phẩm này?'
+              });
+            }}
+          >
             <AiFillDelete className="edit-icon" />
           </button>
         </div>
@@ -104,11 +117,12 @@ const Product = () => {
     router.push('/product/update');
   };
 
-  const handleDelete = (row: any) => {
-    const confirmDelete = window.confirm('Bạn có chắc chắn muốn xoá bản ghi này?');
-    if (confirmDelete) {
-      handleDeleteProduct({ productId: row._id });
-    }
+  const handleDelete = () => {
+    handleDeleteProduct({ productId: id });
+    setIsOpen(false);
+  };
+  const handleClose = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -136,6 +150,7 @@ const Product = () => {
           highlightOnHover
         />
       )}
+      <ModalConfirm isOpen={isOpen} onOk={handleDelete} onCancel={handleClose} prop={prop} />
     </div>
   );
 };
