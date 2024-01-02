@@ -234,7 +234,7 @@ const DetailProduct = ({ data }: any) => {
                         key={index}
                       >
                         <ImageCommon
-                          src={`http://127.0.0.1:7007/${obj.user?.avatarId?.url}`}
+                          src={`${process.env.NEXT_PUBLIC_MEDIA_ENDPOINT}${obj.user?.avatarId?.url}`}
                           alt="Ảnh người dùng"
                           width={500}
                           height={500}
@@ -302,7 +302,7 @@ const DetailProduct = ({ data }: any) => {
                               <ImageCommon
                                 src={
                                   item.user?.avatarId
-                                    ? `http://127.0.0.1:7007/${item.user?.avatarId?.url}`
+                                    ? `${process.env.NEXT_PUBLIC_MEDIA_ENDPOINT}${item.user?.avatarId?.url}`
                                     : '/images/admin.jpg'
                                 }
                                 alt="Ảnh người dùng"
